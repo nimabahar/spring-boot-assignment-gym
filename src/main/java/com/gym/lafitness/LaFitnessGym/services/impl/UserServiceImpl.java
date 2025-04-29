@@ -28,7 +28,9 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDto getUserById(int id) {
-        return null;
+
+        User user = userRepository.findById(id).orElseThrow( () -> new RuntimeException("This ID does not exist.") );
+        return userMapper.mapToUserDto(user);
     }
 
     @Override
