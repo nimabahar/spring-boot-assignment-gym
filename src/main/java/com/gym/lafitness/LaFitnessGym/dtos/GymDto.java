@@ -9,15 +9,11 @@ import java.time.LocalDateTime;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class UserDto {
+public class GymDto {
 
     private int id;
-    private String firstName;
-    private String lastName;
-    private String email;
-    private String userName;
-    private String password;
-    private String profilePicUrl;
+    private String name;
+    private String address;
     private LocalDateTime createdAt = LocalDateTime.now();
     private LocalDateTime updatedAt = LocalDateTime.now();
 }

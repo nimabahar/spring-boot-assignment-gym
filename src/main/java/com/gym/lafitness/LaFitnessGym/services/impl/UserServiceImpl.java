@@ -15,12 +15,12 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private UserRepository userRepository;
+
     @Autowired
     private UserMapper userMapper;
 
     @Override
     public UserDto createUser(UserDto userDto) {
-
         User user = userMapper.mapToUser(userDto);
         User savedUser = userRepository.save(user);
         return userMapper.mapToUserDto(savedUser);
@@ -28,23 +28,39 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDto getUserById(int id) {
-
-        User user = userRepository.findById(id).orElseThrow( () -> new RuntimeException("This ID does not exist.") );
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("User ID not found."));
         return userMapper.mapToUserDto(user);
     }
 
     @Override
     public List<UserDto> getAllUsers() {
-        return List.of();
+        List<User> users = userRepository.findAll();
+        return users.stream().map(userMapper::mapToUserDto).toList();
     }
 
     @Override
     public UserDto updateUserById(int id, UserDto userDto) {
-        return null;
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("User ID not found."));
+
+        user.setFirstName(userDto.getFirstName());
+        user.setLastName(userDto.getLastName());
+        user.setEmail(userDto.getEmail());
+        user.setUserName(userDto.getUserName());
+        user.setPassword(userDto.getPassword());
+        user.setProfilePicUrl(userDto.getProfilePicUrl());
+        user.setUpdatedAt(userDto.getUpdatedAt());
+
+        User updatedUser = userRepository.save(user);
+        return userMapper.mapToUserDto(updatedUser);
     }
 
     @Override
     public String deleteUserById(int id) {
-        return "";
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("User ID not found."));
+        userRepository.delete(user);
+        return "User deleted successfully.";
     }
 }
